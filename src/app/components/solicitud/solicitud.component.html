@@ -1,0 +1,60 @@
+<div class="card solicitud-form">
+  <h3>Solicitud de Carta de Presentación</h3>
+  <h5>Registrar Solicitud</h5>
+
+  <div class="p-grid form-container">
+    <!-- Datos del Estudiante -->
+    <div class="p-col-6">
+      <label for="estudianteNombre">Apellidos y Nombres</label>
+      <input
+        id="estudianteNombre"
+        type="text"
+        pInputText
+        [(ngModel)]="solicitud.estudiante.nombre"
+        placeholder={{userInfo.namenombreCompleto}}
+        disabled
+      />
+    </div>
+
+
+    <div class="p-col-6">
+      <label for="empresa">Empresa</label>
+      <p-dropdown
+        id="empresa"
+        [options]="empresas"
+        optionLabel="nombre"
+        [(ngModel)]="solicitud.empresa"
+        placeholder="Seleccione una empresa"
+      ></p-dropdown>
+    </div>
+
+
+    <div class="p-col-6">
+      <label for="linea">Línea de Carrera</label>
+      <p-dropdown
+        id="linea"
+        [options]="lineas"
+        optionLabel="nombre"
+        [(ngModel)]="solicitud.linea"
+        placeholder="Seleccione una línea de carrera"
+      ></p-dropdown>
+    </div>
+  </div>
+
+  <!-- Botones -->
+  <div class="buttons-container">
+    <button
+      pButton
+      label="Limpiar Formulario"
+      class="p-button-secondary"
+      (click)="onClearForm()"
+    ></button>
+    <button
+      pButton
+      label="Enviar Solicitud"
+      class="p-button-success"
+      (click)="onSubmitSolicitud()"
+      [disabled]="!acceptTerms"
+    ></button>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="login-surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+  <div class="flex flex-column align-items-center justify-content-center">
+    <!-- Logo del sistema -->
+    <!-- Contenedor principal -->
+    <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+      <div class="w-full login-surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
+        <div class="text-center mb-5">
+          <!-- Imagen de perfil del usuario -->
+          <img src="assets/layout/images/logo.png" alt="User Profile" class="login-user-profile-img mb-3">
+          <div class="login-text-600 font-medium mb-3">Inicia sesión para continuar</div>
+        </div>
+
+        <!-- Formulario de login -->
+        <div>
+          <!-- Campo de usuario -->
+          <label for="user1" class="block login-text-900 login-text-xl font-medium mb-2">Usuario</label>
+          <input id="user1" type="text" placeholder="Nombre de usuario" pInputText [(ngModel)]="username" class="w-full md:w-30rem mb-5 login-input" style="padding:1rem">
+
+          <!-- Campo de contraseña -->
+          <label for="password1" class="block login-text-900 font-medium login-text-xl mb-2">Contraseña</label>
+          <p-password 
+            id="password1" 
+            [(ngModel)]="password" 
+            placeholder="Contraseña" 
+            [toggleMask]="true" 
+            styleClass="login-p-password mb-5" 
+            inputStyleClass="w-full p-3 md:w-30rem">
+          </p-password>
+
+          <!-- Opciones adicionales -->
+          <div class="flex align-items-center justify-content-between mb-5 gap-5">
+            <div class="flex align-items-center">
+              <p-checkbox id="rememberme1" [(ngModel)]="rememberMe" binary="true" styleClass="login-p-check mr-2 " ></p-checkbox>
+              <label for="rememberme1" class="login-p-checkbox-label">Recuerdame</label>             
+            </div>
+            <a class="login-link font-medium no-underline ml-2 text-right cursor-pointer">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <!-- Botón de inicio de sesión -->
+          <button 
+            pButton 
+            pRipple 
+            label="Iniciar Sesión" 
+            class="login-button w-full p-3 text-xl" 
+            (click)="onLogin()">
+          </button>
+
+          <!-- Mensaje de error -->
+          <p ngIf="errorMessage" class="text-red-600 text-center mt-3">{{ errorMessage }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

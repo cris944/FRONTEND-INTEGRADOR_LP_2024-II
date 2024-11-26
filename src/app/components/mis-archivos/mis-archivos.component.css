@@ -1,0 +1,27 @@
+.card {
+    padding: 1.5rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    color: black;
+  }
+  
+  .header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .header .info p {
+    margin: 0.5rem 0;
+  }
+  
+  .custom-table {
+    margin-top: 1rem;
+  }
+  
+  .upload-section {
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
