@@ -84,7 +84,11 @@ export class EmpresaComponent {
     this.opc = 'Guardar';
     this.op = 0;
     this.empresa = new Empresa();
+<<<<<<< HEAD
     this.empresa.estado = 'A';
+=======
+    this.empresa.estado = 'A'; // Asignar automáticamente el estado como "A"
+>>>>>>> 1d0f741ceb9c2de608c84dd9aa0bc7da6a81dad1
     this.visible = true;
   }
 
