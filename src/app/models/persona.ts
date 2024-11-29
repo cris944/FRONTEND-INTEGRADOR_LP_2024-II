@@ -8,7 +8,7 @@ export class Persona {
     pais: string;
     religion: string;
     estado:string;
-    constructor(id:number = 0, nombre:string='', apellido:string='', dni:string='', correo:string='', telefono:string='',pais:string='', religion:string='', estado:string=''){
+    constructor(id:number = 0, nombre:string='', apellido:string='', dni:string='', correo:string='', telefono:string='',pais:string='', religion:string='', estado:string='A'){
         this.id=id;
         this.nombre=nombre;
         this.apellido=apellido;

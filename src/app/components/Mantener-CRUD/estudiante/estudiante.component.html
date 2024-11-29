@@ -129,40 +129,44 @@
             <input id="grupo" type="text" pInputText [(ngModel)]="estudiante.grupo" required />
         </div>
         <div class="p-field">
+            <label for="correoin">Correo Institucional</label>
+            <input id="correoin" type="email" pInputText [(ngModel)]="estudiante.correo_institucional" required />
+        </div>
+        <div class="p-field">
             <label for="nombre">Nombre</label>
-            <input id="nombre" type="text" pInputText [(ngModel)]="estudiante.persona.nombre" required />
+            <input id="nombre" type="text" pInputText [(ngModel)]="persona.nombre" required />
         </div>
 
         <div class="p-field">
             <label for="apellido">Apellido</label>
-            <input id="apellido" type="text" pInputText [(ngModel)]="estudiante.persona.apellido" required />
+            <input id="apellido" type="text" pInputText [(ngModel)]="persona.apellido" required />
         </div>
 
         <div class="p-field">
             <label for="dni">DNI</label>
-            <input id="dni" type="text" pInputText [(ngModel)]="estudiante.persona.dni" required />
+            <input id="dni" type="text" pInputText [(ngModel)]="persona.dni" required />
         </div>
 
         <div class="p-field">
             <label for="correo">Correo</label>
-            <input id="correo" type="email" pInputText [(ngModel)]="estudiante.persona.correo" required />
+            <input id="correo" type="email" pInputText [(ngModel)]="persona.correo" required />
         </div>
 
         <div class="p-field">
             <label for="telefono">Teléfono</label>
-            <input id="telefono" type="text" pInputText [(ngModel)]="estudiante.persona.telefono" required />
+            <input id="telefono" type="text" pInputText [(ngModel)]="persona.telefono" required />
         </div>
         <div class="p-field">
             <label for="pais">País</label>
-            <input id="pais" type="text" pInputText [(ngModel)]="estudiante.persona.pais" required />
+            <input id="pais" type="text" pInputText [(ngModel)]="persona.pais" required />
         </div>
         <div class="p-field">
             <label for="religion">Religión</label>
-            <input id="religion" type="text" pInputText [(ngModel)]="estudiante.persona.religion" required />
+            <input id="religion" type="text" pInputText [(ngModel)]="persona.religion" required />
         </div>
         <div class="p-field">
             <label for="estado">Estado</label>
-            <input id="estado" type="text" pInputText [(ngModel)]="persona.estado" required />
+            <input id="estado" type="text" pInputText [(ngModel)]="estudiante.estado" required />
         </div>
     </div>
     <p-footer>

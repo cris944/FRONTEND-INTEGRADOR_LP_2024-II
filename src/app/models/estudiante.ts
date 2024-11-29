@@ -7,6 +7,7 @@ export class Estudiante {
   correo_institucional: string;
   codigo: string;
   persona: Persona;
+  estado: string;
 
   constructor(
     id: number = 0,
@@ -14,7 +15,8 @@ export class Estudiante {
     ciclo: string='',
     grupo: string= '',
     correo_institucional: string='',
-    persona: Persona = new Persona()
+    persona: Persona = new Persona(),
+    estado: string=''
   ) {
     this.id = id;
     this.codigo = codigo;
@@ -22,5 +24,6 @@ export class Estudiante {
     this.grupo= grupo;
     this.correo_institucional= correo_institucional;
     this.persona = persona;
+    this.estado = estado;
   }
 }

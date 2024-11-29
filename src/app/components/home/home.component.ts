@@ -107,10 +107,10 @@ export class HomeComponent implements OnInit,OnDestroy{
       };
 
       this.pieData = {
-          labels: ['A', 'B', 'C'],
+          labels: ['Ingenieria de software', 'Gestion TI', 'Redes'],
           datasets: [
               {
-                  data: [540, 325, 702],
+                  data: [80, 25, 52],
                   backgroundColor: [
                       documentStyle.getPropertyValue('--indigo-500'),
                       documentStyle.getPropertyValue('--purple-500'),

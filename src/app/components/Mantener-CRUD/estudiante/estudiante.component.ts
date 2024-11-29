@@ -262,6 +262,8 @@ export class EstudianteComponent {
   }
 
   addPersonaAndEstudiante() {
+    console.log(this.persona)
+    console.log(this.estudiante)
     if (this.isValid()) {
       this.personaService.createPersona(this.persona).subscribe({
         next: (persona) => {
@@ -303,6 +305,7 @@ export class EstudianteComponent {
   }
 
   updateEstudiante() {
+    console.log(this.estudiante)
     this.estudianteService.updateEstudiante(this.estudiante).subscribe({
       next: () => {
         this.visible = false;
