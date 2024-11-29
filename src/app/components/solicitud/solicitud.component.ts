@@ -1,118 +1,105 @@
-import { Component, OnInit } from '@angular/core';
-import { SolicitudService } from '../../services/solicitud.service';
-import { Solicitud } from '../../models/solicitud';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';   // Asegúrate de que la ruta sea correcta
+import { SolicitudService } from '../../services/solicitud.service';   // Asegúrate de que la ruta sea correcta
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
-import { CommonModule } from '@angular/common';
+import { EmpresaService } from '../../services/empresa.service';
 import { Empresa } from '../../models/empresa';
-import { AuthService } from '../../services/auth.service';
+import { Linea } from '../../models/linea';
+import { LineaService } from '../../services/linea.service';
 
 @Component({
   selector: 'app-solicitud',
+  standalone: true,
   templateUrl: './solicitud.component.html',
   styleUrls: ['./solicitud.component.css'],
-  standalone: true,
-  
   providers: [MessageService],
-  imports: [
-    CommonModule,
-    FormsModule, 
-    HttpClientModule, 
-    InputTextModule, 
-    DropdownModule,
-    ButtonModule, 
-    TableModule
-  ],
-  
+  imports: [ButtonModule,TableModule,FormsModule,DropdownModule],
 })
 export class SolicitudComponent implements OnInit {
-  solicitudes: Solicitud[] = [];
-  solicitud: Solicitud = {
-    id: 0,
-    estudiante: {
-      id: 0,
-      nombre: ''
-    },
-    empresa: {
-      id: 0,
-      nombre: ''
-    },
-    linea: {
-      id: 0,
-      nombre: ''
-    },
-    estado: 'I', 
-    fechaCreacion: '' 
-  };
-  
-  mensaje: string = '';
-  empresas: any[] = []; 
-  lineas: any[] = [];   
-  acceptTerms = false;
+  solicitud: any = { estudiante: {}, empresa: {}, linea: {} };
+  empresas: Empresa[] = [];
+  selectedLinea: Linea | null = null;
   userInfo: any = {};
-  errorMessage: string = '';
+  lineas: Linea[] = [];
+  selectedEmpresa: Linea | null = null;
 
-  constructor(private solicitudService: SolicitudService,private authService: AuthService ) {}
 
-  ngOnInit(): void {
+  constructor(
+    private authService: AuthService,
+    private empresaService: EmpresaService,
+    private solicitudService: SolicitudService,
+    private messageService: MessageService,
+    private lineaService: LineaService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-    this.solicitudService.obtenerDatosIniciales().subscribe(
-      (data) => {
-
-        this.solicitud.estudiante = data.datosIniciales.estudiante; 
-        this.empresas = data.datosIniciales.empresas;              
-        this.lineas = data.datosIniciales.lineas;                  
-      },
-      (error) => {
-        console.error('Error al cargar los datos iniciales:', error);
-      }
-    );
+  ngOnInit() {
+    this.cargarDatosUsuario();
+    this.listarEmpresas();
+    this.listarLineas();
   }
 
-  onClearForm(): void {
-
-    this.solicitud = {
-      id: 0,
-      estudiante: { id: 0, nombre: '' },
-      empresa: { id: 0, nombre: ''},
-      linea: { id: 0, nombre: '' },
-      estado: 'I',
-      fechaCreacion: '',
-    };
-    this.acceptTerms = false;
-  }
-
-  onSubmitSolicitud(): void {
-    if (!this.acceptTerms) {
-      alert('Debe aceptar los términos y condiciones antes de enviar.');
-      return;
-    }
-
-    this.solicitudService.guardarSolicitud(this.solicitud).subscribe(
-      (response) => {
-        alert('Solicitud enviada correctamente.');
-        this.onClearForm();
-      },
-      (error) => {
-        alert('Error al enviar la solicitud: ' + error);
-      }
-    );
-  }
-  loadUserInfo(): void {
+  cargarDatosUsuario() {
     this.authService.getUserInfo().subscribe(
-        (data) => {
-            console.log(data);
-            this.userInfo = data; 
-        },
-        (error) => {
-            console.error(error);
-            this.errorMessage = 'Error al cargar la información del usuario.';
-        }
+      (data) => {
+        this.userInfo = data;
+        this.solicitud.estudiante.nombre = data.namenombreCompleto; 
+
+      },
+      (error) => {
+        console.error('Error al cargar datos del usuario', error);
+      }
     );
-}
+  }
+
+  listarEmpresas() {
+    this.empresaService.getEmpresas().subscribe(
+      (data) => {
+        this.empresas = data;
+        console.log(this.empresas);
+      },
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al cargar empresas',
+          detail: error.message || 'Error al cargar las empresas',
+        });
+      }
+    );
+  }
+
+  listarLineas(): void {
+    this.lineaService.getLineas().subscribe(
+      (data: Linea[]) => {
+        this.lineas = data;
+        console.log('Líneas cargadas:', this.lineas);
+      },
+      (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar las líneas: ' + error.message
+        });
+      }
+    );
+  }
+
+  onSubmitSolicitud() {
+    this.solicitudService.createSolicitud(this.solicitud).subscribe(
+      (response) => {
+        console.log('Solicitud creada con éxito', response);
+      },
+      (error) => {
+        console.error('Error al crear solicitud', error);
+      }
+    );
+  }
+
+  onClearForm() {
+    this.solicitud = { empresa: {}, linea: {} };  // Reiniciar formulario
+  }
 }
