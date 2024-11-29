@@ -20,13 +20,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { ExcelService } from '../../../services/excel.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-estudiante',
   standalone: true,
   imports: [
-    ButtonModule,ToastModule,ToolbarModule,FileUploadModule,TableModule, ButtonModule, DialogModule, RouterModule, InputTextModule,
-    FormsModule, ConfirmDialogModule,SplitButtonModule,MatButtonModule,MatMenuModule,MatIconModule
+    ButtonModule, ToastModule, ToolbarModule, FileUploadModule, TableModule, ButtonModule, DialogModule, RouterModule, InputTextModule,
+    FormsModule, ConfirmDialogModule, SplitButtonModule, MatButtonModule, MatMenuModule, MatIconModule, CommonModule
   ],
   templateUrl: './estudiante.component.html',
   styleUrls: ['./estudiante.component.css'],
@@ -48,6 +49,7 @@ export class EstudianteComponent {
   opc: string = '';
   op = 0;
   selectedFile: File | null = null;
+  modoEdicion: boolean = false;
 
   constructor(
     private estudianteService: EstudianteService,
@@ -74,9 +76,6 @@ export class EstudianteComponent {
     ];
   }
 
-  ////////////////////////////////////////////////////////////////
-  //**IMPORTAR**//
-  ///////////////
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();
   }
@@ -119,8 +118,6 @@ export class EstudianteComponent {
     });
   }
 
-  ///////////////////////////////////////////////////////////////
-
   listarEstudiantes() {
     this.estudianteService.getEstudiantes().subscribe(
       (data) => {
@@ -154,12 +151,19 @@ export class EstudianteComponent {
   }
 
   showDialogCreate() {
-    this.prepareDialog('Crear Estudiante', 'Guardar', 0);
+    this.titulo = 'Crear Estudiante';
+    this.opc = 'Guardar';
+    this.modoEdicion = false;  // Modo crear: no mostramos el campo estado
+    this.estudiante = new Estudiante();
+    this.persona = new Persona();
+    this.persona.estado = 'A'; // Asigna automáticamente "A" al crear un nuevo estudiante
+    this.visible = true;
   }
 
   showDialogEdit(id: number) {
     this.titulo = 'Editar Estudiante';
     this.opc = 'Actualizar';
+    this.modoEdicion = true;  // Modo edición: mostramos el campo estado
 
     this.estudianteService.getEstudianteById(id).subscribe({
       next: (data) => {
@@ -181,6 +185,11 @@ export class EstudianteComponent {
     this.op = opValue;
     this.estudiante = new Estudiante();
     this.persona = new Persona();
+    this.visible = true;
+    if (opValue === 0) { // Crear estudiante
+      this.persona.estado = 'A'; // Asignar automáticamente "A" al crear
+    }
+  
     this.visible = true;
   }
 
@@ -259,7 +268,7 @@ export class EstudianteComponent {
           this.estudiante.persona = persona;
           this.createEstudiante();
         },
-        error: (error) => this.handleError(error, 'No se pudo agregar la persona'),
+        error: (error) => this.handleError(error, 'No se pudo crear la persona'),
       });
     }
   }
@@ -274,81 +283,57 @@ export class EstudianteComponent {
         error: (error) =>
           this.handleError(error, 'No se pudo actualizar la persona'),
       });
+
     }
   }
 
   createEstudiante() {
     this.estudianteService.createEstudiante(this.estudiante).subscribe({
       next: () => {
+        this.visible = false;
         this.messageService.add({
           severity: 'success',
-          summary: 'Correcto',
-          detail: 'Estudiante Registrado',
+          summary: 'Estudiante creado',
+          detail: 'Estudiante creado correctamente',
         });
         this.listarEstudiantes();
-        this.closeDialog();
       },
-      error: (error) =>
-        this.handleError(error, 'No se pudo agregar el estudiante'),
+      error: (error) => this.handleError(error, 'No se pudo crear el estudiante'),
     });
   }
 
   updateEstudiante() {
     this.estudianteService.updateEstudiante(this.estudiante).subscribe({
       next: () => {
+        this.visible = false;
         this.messageService.add({
           severity: 'success',
-          summary: 'Correcto',
-          detail: 'Estudiante Actualizado',
+          summary: 'Estudiante actualizado',
+          detail: 'Estudiante actualizado correctamente',
         });
         this.listarEstudiantes();
-        this.closeDialog();
       },
-      error: (error) =>
-        this.handleError(error, 'No se pudo actualizar el estudiante'),
+      error: (error) => this.handleError(error, 'No se pudo actualizar el estudiante'),
     });
   }
 
   isValid(): boolean {
-    if (
-      !this.persona.nombre ||
-      !this.persona.apellido ||
-      !this.persona.dni ||
-      !this.persona.correo ||
-      !this.persona.telefono ||
-      !this.persona.pais || // Validación del campo nuevo
-      !this.persona.religion || // Validación del campo nuevo
-      !this.persona.estado ||
-      !this.estudiante.codigo ||
-      !this.estudiante.ciclo || // Validación para nuevo campo
-      !this.estudiante.grupo || // Validación para nuevo campo
-      !this.estudiante.correo_institucional // Validación para nuevo campo
-    ) {
+    if (!this.persona.nombre || !this.persona.apellido) {
       this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Todos los campos son obligatorios',
+        severity: 'warn',
+        summary: 'Campos incompletos',
+        detail: 'Por favor, complete los campos de nombre y apellido.',
       });
       return false;
     }
     return true;
   }
 
-  closeDialog() {
-    this.visible = false;
-    this.estudiante = new Estudiante();
-    this.persona = new Persona();
-  }
-
-  onGlobalFilter(table: Table, event: Event) {
-    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-  }
-
-  handleError(error: any, defaultMessage: string) {
+  handleError(error: any, message: string) {
     this.messageService.add({
       severity: 'error',
-      summary: 'Error',
-      detail: error.message || defaultMessage,
+      summary: message,
+      detail: error.message || 'Ha ocurrido un error',
     });
   }
 
@@ -359,18 +344,12 @@ export class EstudianteComponent {
       console.error('La referencia a la tabla no está definida.');
     }
   }
+
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
   onSelectionChange(): void {
     this.cdr.detectChanges();
-  }
-  confirmDelete(estudiante: Estudiante): void {
-    if (!estudiante || !estudiante.id) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No se pudo encontrar el estudiante para eliminar.',
-      });
-      return;
-    }
   }
   limpiar() {
     this.titulo = '';
@@ -380,3 +359,5 @@ export class EstudianteComponent {
     this.visible = false;
   }
 }
+
+
