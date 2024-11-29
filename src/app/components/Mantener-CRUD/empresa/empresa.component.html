@@ -104,7 +104,8 @@
             <input id="representante_legal" type="text" pInputText [(ngModel)]="empresa.representante_legal" required />
         </div>
 
-        <div class="p-field">
+        <!-- Condición para mostrar el campo estado solo en la edición -->
+        <div class="p-field" *ngIf="op === 1">
             <label for="estado">Estado</label>
             <input id="estado" type="text" pInputText [(ngModel)]="empresa.estado" required />
         </div>

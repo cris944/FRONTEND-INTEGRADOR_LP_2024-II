@@ -11,19 +11,36 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { RouterModule } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
-import { ChangeDetectorRef } from '@angular/core'
+import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OnInit } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-persona',
   standalone: true,
-  imports: [ButtonModule, ToastModule, ToolbarModule, FileUploadModule, TableModule, ButtonModule, DialogModule, RouterModule, InputTextModule,
-    FormsModule, ConfirmDialogModule, SplitButtonModule, MatButtonModule, MatMenuModule, MatIconModule],
+  imports: [
+    ButtonModule,
+    ToastModule,
+    ToolbarModule,
+    FileUploadModule,
+    TableModule,
+    ButtonModule,
+    DialogModule,
+    RouterModule,
+    InputTextModule,
+    FormsModule,
+    ConfirmDialogModule,
+    SplitButtonModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatIconModule, 
+    CommonModule
+  ],
   templateUrl: './persona.component.html',
   styleUrls: ['./persona.component.css']
 })
@@ -40,7 +57,7 @@ export class PersonaComponent {
   persona: Persona = new Persona();
   titulo: string = '';
   opc: string = '';
-  op = 0;
+  op = 0; // Indica si es creación (0) o edición (1)
 
   constructor(
     private personaService: PersonaService,
@@ -83,18 +100,19 @@ export class PersonaComponent {
   showDialogCreate() {
     this.titulo = "Crear Persona";
     this.opc = "Guardar";
-    this.op = 0;
+    this.op = 0; // Modo creación
     this.persona = new Persona();
+    this.persona.estado = 'A'; // Asigna el estado 'A' al crear
     this.visible = true;
   }
 
   showDialogEdit(id: number) {
     this.titulo = "Editar Persona";
     this.opc = "Editar";
+    this.op = 1; // Modo edición
     this.personaService.getPersonaById(id).subscribe(
       (data) => {
         this.persona = { ...data };
-        this.op = 1;
         this.visible = true;
       },
       (error) => {
@@ -173,6 +191,11 @@ export class PersonaComponent {
   }
 
   addPersona() {
+    // Asigna el estado 'A' antes de crear la persona
+    if (!this.persona.estado) {
+      this.persona.estado = 'A';
+    }
+
     this.personaService.createPersona(this.persona).subscribe({
       next: () => {
         this.messageService.add({
@@ -181,8 +204,8 @@ export class PersonaComponent {
           detail: 'Persona Registrada',
         });
         this.listarPersonas();
-        this.visible = false;  // Cerrar el diálogo
-        this.persona = new Persona();  // Limpiar el formulario
+        this.visible = false; // Cerrar el diálogo
+        this.persona = new Persona(); // Limpiar el formulario
       },
       error: (error) => {
         this.messageService.add({
@@ -219,7 +242,7 @@ export class PersonaComponent {
     this.titulo = '';
     this.opc = '';
     this.op = 0;
-    this.persona = new Persona();  // Reinicia la variable persona
+    this.persona = new Persona(); // Reinicia la variable persona
     this.visible = false;
   }
 

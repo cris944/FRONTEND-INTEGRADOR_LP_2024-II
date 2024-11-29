@@ -17,15 +17,15 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-empresa',
   standalone: true,
   templateUrl: './empresa.component.html',
-  imports: [ButtonModule,ToastModule,ToolbarModule,FileUploadModule,TableModule, ButtonModule, DialogModule, RouterModule, InputTextModule,
-    FormsModule, ConfirmDialogModule,SplitButtonModule,MatButtonModule,MatMenuModule,MatIconModule],
+  imports: [ButtonModule, ToastModule, ToolbarModule, FileUploadModule, TableModule, ButtonModule, DialogModule, RouterModule, InputTextModule,
+    FormsModule, ConfirmDialogModule, SplitButtonModule, MatButtonModule, MatMenuModule, MatIconModule, CommonModule],
   styleUrls: ['./empresa.component.css'],
-  
 })
 export class EmpresaComponent {
   empresas: Empresa[] = [];
@@ -84,6 +84,7 @@ export class EmpresaComponent {
     this.opc = 'Guardar';
     this.op = 0;
     this.empresa = new Empresa();
+    this.empresa.estado = 'A'; // Asignar automáticamente el estado como "A"
     this.visible = true;
   }
 
@@ -256,11 +257,11 @@ export class EmpresaComponent {
   onSelectionChange(): void {
     this.cdr.detectChanges();
   }
+
   importFile() {
-    
     console.log('Importar archivo');
   }
-  
+
   exportData() {
     if (this.dt) {
       this.dt.exportCSV();
