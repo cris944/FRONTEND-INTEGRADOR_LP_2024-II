@@ -40,7 +40,7 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
                         <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
-                        <th pSortableColumn="razon_social">Razón Social <p-sortIcon field="razon_social"></p-sortIcon></th>
+                        <th pSortableColumn="razon_social">Razón Social <p-sortIcon field="razon_Social"></p-sortIcon></th>
                         <th pSortableColumn="sector">Sector <p-sortIcon field="sector"></p-sortIcon></th>
                         <th pSortableColumn="ruc">RUC <p-sortIcon field="ruc"></p-sortIcon></th>
                         <th pSortableColumn="direccion">Dirección <p-sortIcon field="direccion"></p-sortIcon></th>
@@ -56,7 +56,7 @@
                             <p-tableCheckbox [value]="empresa"></p-tableCheckbox>
                         </td>
                         <td>{{ empresa.id }}</td>
-                        <td>{{ empresa.razon_social }}</td>
+                        <td>{{ empresa.razon_Social }}</td>
                         <td>{{ empresa.sector }}</td>
                         <td>{{ empresa.ruc }}</td>
                         <td>{{ empresa.direccion }}</td>
@@ -80,8 +80,8 @@
 <p-dialog header="{{titulo}}" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
     <div class="p-fluid">
         <div class="p-field">
-            <label for="razon_social">Razón Social</label>
-            <input id="razon_social" type="text" pInputText [(ngModel)]="empresa.razon_social" required />
+            <label for="razon_Social">Razón Social</label>
+            <input id="razon_Social" type="text" pInputText [(ngModel)]="empresa.razon_social" required />
         </div>
 
         <div class="p-field">
@@ -104,7 +104,8 @@
             <input id="representante_legal" type="text" pInputText [(ngModel)]="empresa.representante_legal" required />
         </div>
 
-        <div class="p-field">
+        <!-- Condición para mostrar el campo estado solo en la edición -->
+        <div class="p-field" *ngIf="op === 1">
             <label for="estado">Estado</label>
             <input id="estado" type="text" pInputText [(ngModel)]="empresa.estado" required />
         </div>

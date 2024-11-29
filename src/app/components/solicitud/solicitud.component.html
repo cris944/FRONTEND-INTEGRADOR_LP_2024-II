@@ -11,33 +11,35 @@
         type="text"
         pInputText
         [(ngModel)]="solicitud.estudiante.nombre"
-        placeholder={{userInfo.namenombreCompleto}}
+        placeholder="{{solicitud.estudiante.nombre}}"
         disabled
       />
     </div>
 
+    <!-- Empresa -->
+<!-- Empresa -->
+<div class="p-col-6">
+  <label for="empresa">Empresa</label>
+  <p-dropdown
+    id="empresa"
+    [options]="empresas" 
+    optionLabel="razon_Social"
+    optionValue="id" 
+    [(ngModel)]="solicitud.empresa"
+    placeholder="Seleccione una empresa"
+  ></p-dropdown>
+</div>
 
-    <div class="p-col-6">
-      <label for="empresa">Empresa</label>
-      <p-dropdown
-        id="empresa"
-        [options]="empresas"
-        optionLabel="nombre"
-        [(ngModel)]="solicitud.empresa"
-        placeholder="Seleccione una empresa"
-      ></p-dropdown>
-    </div>
 
-
+    <!-- Línea de Carrera -->
     <div class="p-col-6">
       <label for="linea">Línea de Carrera</label>
-      <p-dropdown
-        id="linea"
-        [options]="lineas"
-        optionLabel="nombre"
-        [(ngModel)]="solicitud.linea"
-        placeholder="Seleccione una línea de carrera"
-      ></p-dropdown>
+      <p-dropdown 
+      [options]="lineas" 
+      optionLabel="nombre" 
+      [(ngModel)]="selectedLinea" 
+      placeholder="Selecciona una línea">
+    </p-dropdown>
     </div>
   </div>
 
@@ -54,7 +56,7 @@
       label="Enviar Solicitud"
       class="p-button-success"
       (click)="onSubmitSolicitud()"
-      [disabled]="!acceptTerms"
+
     ></button>
   </div>
 </div>

@@ -1,54 +1,37 @@
+// solicitud.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-import { Solicitud } from '../models/solicitud';   // Importa tu DTO aquí
+export interface EmpresaDto {
+  id: number;
+  razonSocial: string;
+  direccion: string;
+}
+
+export interface LineaDto {
+  id: number;
+  nombre: string;
+}
+
+export interface SolicitudDto {
+  id: number;
+  estado: string;
+  fechaCreacion: string;
+  estudiante: any;
+  empresa: EmpresaDto;
+  linea: LineaDto;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class SolicitudService {
-  private apiUrl = 'http://localhost:8080/api/solicitudes'; // URL de la API
-
+  private apiUrl = 'http://localhost:8080/api/solicitudes';
   constructor(private http: HttpClient) {}
 
-
-  obtenerDatosYSolicitudes(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}`).pipe(
-      catchError(this.handleError)
-    );
+  // Crear solicitud
+  createSolicitud(solicitud: SolicitudDto): Observable<SolicitudDto> {
+    return this.http.post<SolicitudDto>(this.apiUrl, solicitud);
   }
-
-  guardarSolicitud(solicitud: Solicitud): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}`, solicitud, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    }).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-
-  listarSolicitudes(): Observable<Solicitud[]> {
-    return this.http.get<Solicitud[]>(`${this.apiUrl}/list`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-
-      errorMessage = `Código de error: ${error.status}\nMensaje: ${error.message}`;
-    }
-    return throwError(errorMessage);
-  }
-  obtenerDatosIniciales(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}`);
-  }
-
-
 }

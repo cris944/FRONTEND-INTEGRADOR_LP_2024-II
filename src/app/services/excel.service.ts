@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class ExcelService {
 
-  private apiUrl = 'http://localhost:8080/api/excel/upload'; // Cambiar según tu configuración
+  private apiUrl = 'http://localhost:8080/api/excel/upload';
 
   constructor(private http: HttpClient) { }
 
@@ -24,10 +24,10 @@ export class ExcelService {
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
-      // Error del lado del cliente
+    
       console.error('Error del cliente:', error.error.message);
     } else {
-      // Error del lado del servidor
+    
       console.error(`Backend code ${error.status}, body: `, error.error);
     }
     return throwError(() => new Error('Ocurrió un error al subir el archivo. Intenta nuevamente.'));

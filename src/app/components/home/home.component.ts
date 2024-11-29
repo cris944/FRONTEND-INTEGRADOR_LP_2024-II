@@ -129,7 +129,7 @@ export class HomeComponent implements OnInit,OnDestroy{
               legend: {
                   labels: {
                       usePointStyle: true,
-                      color: textColorSecondary
+                      color: textColorSecondary 
                   }
               }
           }

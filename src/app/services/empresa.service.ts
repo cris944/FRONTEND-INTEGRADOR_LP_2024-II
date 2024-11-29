@@ -17,7 +17,6 @@ export class EmpresaService {
     return this.http.get<Empresa[]>(this.apiUrl);
   }
 
-
   getEmpresasById(id: number): Observable<Empresa> {
     return this.http.get<Empresa>(`${this.apiUrl}/${id}`);
   }
